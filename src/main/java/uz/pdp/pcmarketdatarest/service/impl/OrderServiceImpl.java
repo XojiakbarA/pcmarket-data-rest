@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import uz.pdp.pcmarketdatarest.dto.OrderDTO;
+import uz.pdp.pcmarketdatarest.Mapper;
+import uz.pdp.pcmarketdatarest.dto.request.OrderDTO;
+import uz.pdp.pcmarketdatarest.dto.view.OrderViewDTO;
 import uz.pdp.pcmarketdatarest.entity.Order;
 import uz.pdp.pcmarketdatarest.entity.OrderItem;
 import uz.pdp.pcmarketdatarest.entity.OrderStatus;
@@ -15,16 +17,21 @@ import uz.pdp.pcmarketdatarest.repository.OrderRepository;
 import uz.pdp.pcmarketdatarest.service.OrderService;
 import uz.pdp.pcmarketdatarest.service.ProductService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private Mapper mapper;
 
     @Transactional
     @Override
-    public Order create(OrderDTO dto) {
+    public OrderViewDTO create(OrderDTO dto) {
         Order order = new Order();
         order.setName(dto.getName());
         order.setAddress(dto.getAddress());
@@ -40,13 +47,14 @@ public class OrderServiceImpl implements OrderService {
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setCount(i.getCount());
+            orderItem.setPrice(product.getPrice());
 
             order.getOrderItems().add(orderItem);
             product.setCount(product.getCount() - i.getCount());
             productService.save(product);
         });
 
-        return save(order);
+        return mapper.mapToDTO(save(order));
     }
 
     @Override
@@ -55,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order update(OrderDTO dto, Long id) {
+    public OrderViewDTO update(OrderDTO dto, Long id) {
         Order order = findById(id);
         if (dto.getName() != null && !dto.getName().isBlank()) {
             order.setName(dto.getName());
@@ -69,7 +77,12 @@ public class OrderServiceImpl implements OrderService {
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             order.setEmail(dto.getEmail());
         }
-        return save(order);
+        return mapper.mapToDTO(save(order));
+    }
+
+    @Override
+    public List<OrderViewDTO> findAll() {
+        return orderRepository.findAll().stream().map(o -> mapper.mapToDTO(o)).collect(Collectors.toList());
     }
 
     @Override

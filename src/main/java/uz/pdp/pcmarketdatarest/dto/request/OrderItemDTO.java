@@ -1,4 +1,4 @@
-package uz.pdp.pcmarketdatarest.dto;
+package uz.pdp.pcmarketdatarest.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

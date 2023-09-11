@@ -1,4 +1,4 @@
-package uz.pdp.pcmarketdatarest.dto;
+package uz.pdp.pcmarketdatarest.dto.request;
 
 import java.util.Set;
 

@@ -30,8 +30,8 @@ public class Product {
     @ManyToMany
     private Set<Tag> tags;
 
-    @ManyToMany
-    private Set<AttributeName> attributeNames; //product details
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Attribute> attributes; //product details
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Attachment> attachments;

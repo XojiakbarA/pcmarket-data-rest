@@ -17,7 +17,4 @@ public class AttributeName {
 
     @OneToMany(mappedBy = "attributeName", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AttributeValue> attributeValues;
-
-    @ManyToMany(mappedBy = "attributeNames", fetch = FetchType.LAZY)
-    private Set<Product> products;
 }

@@ -1,6 +1,7 @@
 package uz.pdp.pcmarketdatarest.entity;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -36,7 +37,7 @@ public class Order {
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OrderItem> orderItems;
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     @Column(nullable = false)
     private OrderStatus status = OrderStatus.ACTIVE;
