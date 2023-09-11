@@ -16,7 +16,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Integer count;
 
     @Column(nullable = false)
     private Double price;
@@ -38,4 +38,7 @@ public class Product {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems;
 }
